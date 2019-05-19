@@ -38,6 +38,11 @@ public class FortuneService {
         }
     }
 
+    /**
+     * Return a random fortune.
+     *
+     * @return fortune
+     */
     public Fortune getFortune() {
         Random rand = new Random();
         Fortune fortune = fortunes.get(rand.nextInt(fortunes.size()));
