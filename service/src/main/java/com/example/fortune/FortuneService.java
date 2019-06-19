@@ -16,6 +16,9 @@ public class FortuneService {
     @Value("${swfortune.version:0}")
     private String version;
 
+    /**
+     * List of Fortune objects.
+     */
     private List<Fortune> fortunes;
 
     /**
@@ -50,10 +53,20 @@ public class FortuneService {
         return fortune;
     }
 
+    /**
+     * Accessor to get the current fortunes list.
+     *
+     * @return fortunes List of Fortunes objects.
+     */
     public List<Fortune> getFortunes() {
         return fortunes;
     }
 
+    /**
+     * Accessor to set/replace the fortunes list.
+     *
+     * @param fortunes List for Fortune objexts.
+     */
     public void setFortunes(List<Fortune> fortunes) {
         this.fortunes = fortunes;
     }

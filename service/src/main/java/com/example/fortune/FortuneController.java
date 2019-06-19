@@ -11,9 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/fortune")
 public class FortuneController {
 
+    /**
+     * Service object that returns fortunes.
+     */
     @Autowired
     private FortuneService fortuneService;
 
+    /**
+     * Return a random fortune as a json payload.
+     *
+     * @return response
+     */
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getFortune() {
         return ResponseEntity.status(HttpStatus.OK).body(fortuneService.getFortune());
