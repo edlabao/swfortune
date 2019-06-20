@@ -8,8 +8,9 @@
 ARG COMMIT_HASH=n/a
 ARG APP_NAME=swfortune
 
-
+#-------------------------------------------------------------------------------
 # First stage builds the jar file.
+#
 FROM eldr/java-devel:1.12.0-1 AS build-stage
 
 # Globals used this stage.
@@ -26,8 +27,9 @@ RUN cd /tmp \
     && cd service \
     && mvn package
 
-
+#-------------------------------------------------------------------------------
 # Second stage packages the jar into a slimmer java image.
+#
 FROM eldr/java-jdk:1.12.0-1
 
 # Globals used this stage.
@@ -37,7 +39,7 @@ ARG COMMIT_HASH
 # Variables used for generating the image tag.
 ARG REGISTRY=
 ARG ORGANIZATION=eldr
-ARG APP_VERSION=0.1.0
+ARG APP_VERSION=0.1.0-SNAPSHOT
 ARG APP_BUILD_NUMBER=1
 
 # Other build variables.

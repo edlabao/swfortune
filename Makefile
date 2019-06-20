@@ -22,6 +22,7 @@ ifneq ($(commit_hash), )
 	commit_hash_opt=--build-arg COMMIT_HASH=$(shell sh -c "git rev-parse --short HEAD")
 endif
 
+
 # Print out help text.
 help:
 	@echo ""
@@ -30,7 +31,16 @@ help:
 	@echo "    push"
 	@echo ""
 
-# Genereate the image tag from args in the Dockerfile.
+# Parse for the version from the pom.xml. Replace the APP_VERSION in the
+# Dockerfile with the version from the pom.xml.
+sync_versions:
+	$(eval version=$(shell sh -c "xpath service/pom.xml '/project/version/text()' 2>/dev/null"))
+	@cat container/Dockerfile \
+		| sed -E "s/^ARG APP_VERSION=.+/ARG APP_VERSION=$(version)/g" \
+		> container/Dockerfile.tmp \
+	&& mv container/Dockerfile.tmp container/Dockerfile
+
+# Generate the image tag from args in the Dockerfile.
 tag:
 	$(eval REG=$(shell sh -c "(test ${REGISTRY} && echo ${REGISTRY}) || grep '^ARG REGISTRY=' container/Dockerfile | cut -d= -f2"))
 	$(eval REG=$(shell sh -c "(test $(REG) && echo $(REG)/)"))
@@ -50,6 +60,6 @@ tag:
 #     make REGISTRY=foo.com ORGANIZATION=bar java-jdk
 #     export REGISTRY=foo.com; make java-jdk
 #
-build: tag
+build: sync_versions tag
 	@echo "Building image"
 	cd container && docker build $(build_opts) $(commit_hash_opt) -t $(TAG) .
